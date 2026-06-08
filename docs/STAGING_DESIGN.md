@@ -1,6 +1,8 @@
 # Staging Design
 
-## Current staging database
+## Staging databases
+
+### Program Operations staging
 
 Database:
 - `Stg_ProgramOps_DB`
@@ -9,18 +11,24 @@ Schemas:
 - `stg_program_ops`
 - `etl_admin`
 
-## Purpose
-
-`stg_program_ops` stores extracted copies of source tables from:
-
+Source:
 - `Source_ProgramOps_DB.program_ops`
 
-`etl_admin` stores ETL operational metadata such as:
+### Finance Operations staging
 
-- batch status
-- load logs
-- row counts
-- error messages
+Database:
+- `Stg_FinanceOps_DB`
+
+Schemas:
+- `stg_finance_ops`
+- `etl_admin`
+
+Source:
+- `Source_FinanceOps_DB.finance_ops`
+
+## Purpose
+
+The staging layer stores extracted source data before it is transformed and loaded into the data warehouse.
 
 ## Tables created under `stg_program_ops`
 
@@ -44,6 +52,18 @@ Schemas:
 - `note_batches`
 - `note_batch_items`
 - `audit_logs`
+
+## Tables created under `stg_finance_ops`
+
+- `donors`
+- `campaigns`
+- `donations`
+- `expense_categories`
+- `expenses`
+- `payments`
+- `budget_allocations`
+- `financial_transactions`
+- `currency_rates`
 
 ## Staging table design
 
