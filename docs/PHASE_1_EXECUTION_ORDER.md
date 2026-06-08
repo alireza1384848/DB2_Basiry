@@ -12,6 +12,7 @@ Run these scripts in SQL Server Management Studio:
 ## Staging layer
 
 5. `sql/02_staging/05_create_stg_program_ops_db.sql`
+6. `sql/02_staging/06_create_stg_program_ops_tables.sql`
 
 Created databases:
 
@@ -27,5 +28,5 @@ Created schemas:
 - `Stg_ProgramOps_DB.etl_admin`
 
 Note:
-- The current staging script only creates the Program Operations staging database/schema and minimal ETL admin tables.
-- Staging source-copy tables will be created in the next step.
+- `06_create_stg_program_ops_tables.sql` creates source-copy staging tables only.
+- The data-load script from source to staging will be created in the next step.

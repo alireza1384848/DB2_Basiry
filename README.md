@@ -6,7 +6,7 @@ Target DBMS:
 
 Current phase:
 - Phase 1: Create and populate operational source databases.
-- Phase 2 start: Create the Program Operations staging database.
+- Phase 2: Create Program Operations staging database and staging tables.
 
 Included SQL scripts:
 1. `sql/01_source/01_create_source_program_ops_db.sql`
@@ -14,6 +14,7 @@ Included SQL scripts:
 3. `sql/01_source/03_insert_sample_program_ops_data.sql`
 4. `sql/01_source/04_insert_sample_finance_ops_data.sql`
 5. `sql/02_staging/05_create_stg_program_ops_db.sql`
+6. `sql/02_staging/06_create_stg_program_ops_tables.sql`
 
 Recommended execution order in SSMS:
 1. Run `sql/01_source/01_create_source_program_ops_db.sql`
@@ -21,6 +22,7 @@ Recommended execution order in SSMS:
 3. Run `sql/01_source/03_insert_sample_program_ops_data.sql`
 4. Run `sql/01_source/04_insert_sample_finance_ops_data.sql`
 5. Run `sql/02_staging/05_create_stg_program_ops_db.sql`
+6. Run `sql/02_staging/06_create_stg_program_ops_tables.sql`
 
 Created databases so far:
 - `Source_ProgramOps_DB`
@@ -33,8 +35,8 @@ Created schemas so far:
 - `Stg_ProgramOps_DB.stg_program_ops`
 - `Stg_ProgramOps_DB.etl_admin`
 
-Important design:
-- Source systems remain independent.
-- Program staging is separated from source data.
-- `etl_admin` is used for ETL batch control and load logging.
-- Staging tables will be added in the next step.
+Important staging design:
+- Staging tables mirror source tables.
+- No business foreign keys are created in staging.
+- Every staging table includes ETL metadata columns.
+- The next step will be loading data from `Source_ProgramOps_DB.program_ops` into `Stg_ProgramOps_DB.stg_program_ops`.

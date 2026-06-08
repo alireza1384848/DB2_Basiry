@@ -11,7 +11,7 @@ Schemas:
 
 ## Purpose
 
-`stg_program_ops` will store extracted copies of source tables from:
+`stg_program_ops` stores extracted copies of source tables from:
 
 - `Source_ProgramOps_DB.program_ops`
 
@@ -22,42 +22,54 @@ Schemas:
 - row counts
 - error messages
 
-## Why separate staging from source?
+## Tables created under `stg_program_ops`
 
-The staging layer lets us:
+- `centers`
+- `children`
+- `teachers`
+- `users`
+- `domains`
+- `score_scales`
+- `task_templates`
+- `closure_reasons`
+- `absence_reasons`
+- `no_score_reasons`
+- `center_daily_status`
+- `child_daily_status`
+- `child_task_plans`
+- `daily_task_assignments`
+- `assessment_sessions`
+- `task_assessments`
+- `notes`
+- `note_batches`
+- `note_batch_items`
+- `audit_logs`
 
-- extract source data safely
-- keep raw source snapshots
-- validate data before warehouse loading
-- add ETL metadata
-- avoid querying operational source tables directly from the warehouse
+## Staging table design
 
-## Future staging table pattern
+Staging tables mirror the source structure and add ETL metadata:
 
-Example future table:
+- `stg_row_id`
+- `etl_batch_id`
+- `source_system`
+- `source_database`
+- `source_schema`
+- `source_table`
+- `extracted_at`
+- `source_updated_at`
+- `row_hash`
+- `is_valid`
+- `validation_message`
 
-```sql
-CREATE TABLE stg_program_ops.children (
-    id INT,
-    center_id INT,
-    first_name NVARCHAR(100),
-    last_name NVARCHAR(100),
-    national_code NVARCHAR(20),
-    birth_date DATE,
-    gender NVARCHAR(20),
-    enrollment_date DATE,
-    status NVARCHAR(50),
-    created_at DATETIME2(0),
-    updated_at DATETIME2(0),
+## Why no business foreign keys in staging?
 
-    etl_batch_id INT,
-    source_system NVARCHAR(100),
-    extracted_at DATETIME2(0),
-    source_database NVARCHAR(128),
-    source_schema NVARCHAR(128),
-    source_table NVARCHAR(128),
-    row_hash VARBINARY(32),
-    is_valid BIT,
-    validation_message NVARCHAR(MAX)
-);
-```
+The staging layer is a landing area. It should accept source data as-is.
+
+Data-quality problems should be:
+
+1. loaded into staging,
+2. detected by quality checks,
+3. logged,
+4. handled before warehouse loading.
+
+This avoids losing problematic records before they can be analyzed.
